@@ -88,17 +88,17 @@
 								for(let k = 0; k < divs.length; k++){
 									if(divs[k].classList.contains("sel")){
 										//check the move is possible using a straight line between the start and end points
-										let to_col = col;
-										let to_row = row;
-										let from_col = 8 - cols.indexOf(divs[k].classList[0]);
-										let from_row = divs[k].classList[1];
+										let to_col = parseInt(j) + 1;
+										let to_row = parseInt(8 - i);
+										let from_col = parseInt(cols.indexOf(divs[k].classList[0])) + 1;
+										let from_row = parseInt(divs[k].classList[1]);
 										let move_possible = true;
-										if(Math.abs(to_row - from_row) == Math.abs(to_col - from_col) || (to_row == from_row) || (to_col == from_col)){
-											let row_dir = ((to_row - from_row) / Math.abs(to_row - from_row)) || 0;
+										if(((Math.abs(to_row - from_row) == Math.abs(to_col - from_col)) | (to_row == from_row) | (to_col == from_col))){
+											let row_dir = -((to_row - from_row) / Math.abs(to_row - from_row)) || 0;
 											let col_dir = ((to_col - from_col) / Math.abs(to_col - from_col)) || 0;
-											for(let check = 1; check < Math.abs(to_row - from_row); check++){
-												let c_c = cols[from_col + (check * col_dir)];
-												let c_r = from_row + (check * row_dir);
+											for(let check = 1; (check < Math.abs(to_row - from_row)) | (check < Math.abs(to_col - from_col)); check++){
+												let c_c = cols[from_col + (check * col_dir) - 1];
+												let c_r = parseInt(from_row) + (check * -row_dir);
 												let cdiv = document.getElementsByClassName(c_c + " " + c_r)[0];
 												let c_span = cdiv.getElementsByTagName("span")[0]
 												if(c_span.innerText != ""){
@@ -123,9 +123,27 @@
 							for(let k = 0; k < divs.length; k++){
 								if(divs[k].classList.contains("sel")){
 									//check the move is possible using a straight line between the start and end points
+									let to_col = parseInt(j) + 1;
+									let to_row = parseInt(8 - i);
+									let from_col = parseInt(cols.indexOf(divs[k].classList[0])) + 1;
+									let from_row = parseInt(divs[k].classList[1]);
+									let move_possible = true;
+									if(((Math.abs(to_row - from_row) == Math.abs(to_col - from_col)) | (to_row == from_row) | (to_col == from_col))){
+										let row_dir = -((to_row - from_row) / Math.abs(to_row - from_row)) || 0;
+										let col_dir = ((to_col - from_col) / Math.abs(to_col - from_col)) || 0;
+										for(let check = 1; (check < Math.abs(to_row - from_row)) | (check < Math.abs(to_col - from_col)); check++){
+											let c_c = cols[from_col + (check * col_dir) - 1];
+											let c_r = parseInt(from_row) + (check * -row_dir);
+											let cdiv = document.getElementsByClassName(c_c + " " + c_r)[0];
+											let c_span = cdiv.getElementsByTagName("span")[0]
+											if(c_span.innerText != ""){
+												move_possible = false;
+											}
+										}
+									}
 
-									if(Math.floor(pie.indexOf(divs[k].innerText)/2) == 5){
-									}else if(from_type != pie.indexOf(divs[k].innerText) % 2){
+									if(Math.floor(pie.indexOf(divs[k].innerText)/2) == 5 | !move_possible){
+									}else if(from_type != pie.indexOf(divs[k].innerText && move_possible) % 2){
 										let span = divs[k].getElementsByTagName("span")[0];
 										p.innerText = span.innerText;
 										span.innerText = "";
