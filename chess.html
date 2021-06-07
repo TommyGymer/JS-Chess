@@ -123,7 +123,7 @@
 							}else{
 								de_sel = true;
 							}
-						}else if(div.classList.contains("move")){
+						}else if(div.classList.contains("move") || div.classList.contains("pawn_move")){
 							//take piece
 							let from_type = pie.indexOf(div.innerText) % 2
 							for(let k = 0; k < divs.length; k++){
@@ -148,7 +148,7 @@
 										}
 									}
 
-									if(Math.floor(pie.indexOf(divs[k].innerText)/2) == 5 | !move_possible){
+									if((Math.floor(pie.indexOf(divs[k].innerText)/2) == 5 & !div.classList.contains("pawn_move")) | !move_possible){
 									}else if((from_type != pie.indexOf(divs[k].innerText) % 2) && move_possible){
 										let span = divs[k].getElementsByTagName("span")[0];
 										p.innerText = span.innerText;
