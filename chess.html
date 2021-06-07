@@ -30,6 +30,9 @@
 			#board tr td div.moved{
 				background-color: #ccccee;
 			}
+			#board tr td div.pawn_move{
+				background-color: #dddddf;
+			}
 			#board tr td div span{
 				font-size: 48px;
 				padding-left: 8px;
@@ -60,6 +63,7 @@
 				[10, 10, 10, 10, 10, 10, 10, 10],
 				[4, 8, 6, 2, 0, 6, 8, 4]
 			];
+			let turn = 1;
 			//initialise the board
 			for(let i = 0; i < 8; i++){
 				//add a row
@@ -82,6 +86,7 @@
 						let divs = document.getElementsByTagName('div');
 						let moving = false;
 						let de_sel = false;
+						let moved = false;
 						if(p.innerText == ""){
 							//check for move
 							if(div.classList.contains("move")){
@@ -110,6 +115,7 @@
 											let span = divs[k].getElementsByTagName("span")[0];
 											p.innerText = span.innerText;
 											span.innerText = "";
+											moved = true;
 										}
 									}
 								}
@@ -143,10 +149,11 @@
 									}
 
 									if(Math.floor(pie.indexOf(divs[k].innerText)/2) == 5 | !move_possible){
-									}else if(from_type != pie.indexOf(divs[k].innerText && move_possible) % 2){
+									}else if((from_type != pie.indexOf(divs[k].innerText) % 2) && move_possible){
 										let span = divs[k].getElementsByTagName("span")[0];
 										p.innerText = span.innerText;
 										span.innerText = "";
+										moved = true;
 									}
 								}
 							}
@@ -156,6 +163,7 @@
 							divs[k].classList.remove("sel");
 							divs[k].classList.remove("move");
 							divs[k].classList.remove("moved");
+							divs[k].classList.remove("pawn_move");
 						}
 						if(!moving){
 							 if(!de_sel){
@@ -163,14 +171,16 @@
 							 }else{
 							 	return;
 							 }
-						}else{
+						}else if(moved){
 							div.classList.add("moved");
+							turn = (turn + 1) % 2;
 							return;
 						}
 
 						//add possible move markers
 						let pos = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0].getElementsByTagName("span")[0];
 						let type = Math.floor(pie.indexOf(pos.innerText) / 2);
+						if(turn == pie.indexOf(pos.innerText) % 2){return;}
 						switch(type){
 							case 0:
 								for(let k = 0; k < divs.length; k++){
@@ -226,6 +236,9 @@
 									let side = -(pie.indexOf(pos.innerText) % 2) + 0.5;
 									if(!(c == j && r == i) && (j == c && ((i - r) * side < 1 + (0.5 * ((-2 * side) * (3.5 - r) > 0)))) && ((i * side) > (r * side))){
 										divs[k].classList.add("move");
+									}
+									if(Math.abs(c - j) == 1 && (i - r) == side * 2){
+										divs[k].classList.add("pawn_move");
 									}
 								}
 								break;
