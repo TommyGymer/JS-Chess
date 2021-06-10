@@ -1,49 +1,69 @@
 <html>
 	<head>
 		<style>
-			#board{
+			table.board{
 				margin: 0px;
 			}
-			#board tr{
+			table.board tr{
 				margin: 0px;
 			}
-			#board tr td{
+			table.board tr td{
 				margin: 0px;
 			}
-			#board tr td div{
+			table.board tr td div{
 				width: 64px;
 				height: 64px;
 				margin: 0px;
 			}
-			#board tr td div.light{
+			table.board tr td div.light{
 				background-color: #ffeeee;
 			}
-			#board tr td div.dark{
+			table.board tr td div.dark{
 				background-color: #ccffcc;
 			}
-			#board tr td div.sel{
+			table.board tr td div.sel{
 				background-color: #ffff99;
 			}
-			#board tr td div.move{
+			table.board tr td div.move{
 				background-color: #dddddf;
 			}
-			#board tr td div.moved{
+			table.board tr td div.moved{
 				background-color: #ccccee;
 			}
-			#board tr td div.pawn_move{
+			table.board tr td div.pawn_move{
 				background-color: #dddddf;
 			}
-			#board tr td div span{
+			table.board tr td div.option{
+				background-color: #efefef;
+			}
+			table.board tr td div span{
 				font-size: 48px;
 				padding-left: 8px;
 				cursor: default;
+			}
+			div.promotion{
+				position: absolute;
+				top:  8px;
+				left: 8px;
+			}
+			.hidden{
+				visibility:  hidden;
 			}
 		</style>
 	</head>
 
 	<body>
-		<table id="board">
+		<table class="board" id="board">
 		</table>
+		<div class="promotion hidden">
+			<table class="board">
+				<tr>
+					<td><div class="option"><span>♖</span></div></td>
+					<td><div class="option"><span>♗</span></div></td>
+					<td><div class="option"><span>♕</span></div></td>
+				</tr>
+			</table>
+		</div>
 
 		<script type="text/javascript">
 			//gets the table with id = board
@@ -82,7 +102,6 @@
 					div.append(p);
 					//add a click listener to each div
 					div.addEventListener("click", () => {
-						//console.log(cols[j] + " " + String(8-i));
 						let divs = document.getElementsByTagName('div');
 						let moving = false;
 						let de_sel = false;
@@ -141,7 +160,7 @@
 											let c_c = cols[from_col + (check * col_dir) - 1];
 											let c_r = parseInt(from_row) + (check * -row_dir);
 											let cdiv = document.getElementsByClassName(c_c + " " + c_r)[0];
-											let c_span = cdiv.getElementsByTagName("span")[0]
+											let c_span = cdiv.getElementsByTagName("span")[0];
 											if(c_span.innerText != ""){
 												move_possible = false;
 											}
@@ -164,6 +183,7 @@
 							divs[k].classList.remove("move");
 							divs[k].classList.remove("moved");
 							divs[k].classList.remove("pawn_move");
+							divs[k].classList.remove("promote");
 						}
 						if(!moving){
 							 if(!de_sel){
