@@ -87,7 +87,7 @@
 			//pieces
 			let pie = ['♔', '♚', '♕', '♛', '♖', '♜', '♗', '♝', '♘', '♞', '♙', '♟︎'];
 			//init board state
-			let state = [
+			/*let state = [
 				[5, 9, 7, 3, 1, 7, 9, 5],
 				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
@@ -96,6 +96,16 @@
 				[],
 				[10, 10, 10, 10, 10, 10, 10, 10],
 				[4, 8, 6, 2, 0, 6, 8, 4]
+			];*/
+			let state = [
+				[],
+				[],
+				[10, 10, 10, 10, 10, 10, 10, 10],
+				[],
+				[11, 11, 11, 11, 11, 11, 11, 11],
+				[],
+				[],
+				[]
 			];
 			let turn = 1;
 			//initialise the board
@@ -180,7 +190,7 @@
 											}
 										}
 									}
-
+									
 									if((Math.floor(pie.indexOf(divs[k].innerText)/2) == 5 & !div.classList.contains("pawn_move")) | !move_possible){
 									}else if((from_type != pie.indexOf(divs[k].innerText) % 2) && move_possible){
 										let span = divs[k].getElementsByTagName("span")[0];
@@ -277,8 +287,9 @@
 									if(Math.abs(c - j) == 1 && (i - r) == side * 2){
 										divs[k].classList.add("pawn_move");
 									}
-									if(i == (3.5 + 5 * -side)){
-										divs[k].classList.add("promote");
+									if(i == (3.5 + 5 * -side) && j == c){
+										console.log(8 - i + 2 * side);
+										document.getElementsByClassName(cols[j] + " " + (8 - i + 2 * side).toString())[0].classList.add("promote");
 									}
 								}
 								break;
