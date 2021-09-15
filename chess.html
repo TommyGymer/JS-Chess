@@ -102,8 +102,8 @@
 				[],
 				[10, 10, 10, 10, 10, 10, 10, 10],
 				[],
-				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
+				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
 				[]
 			];
@@ -200,6 +200,9 @@
 									}
 
 									//check for promotions, and display promotion interface
+									if(div.classList.contains("promote")){
+										
+									}
 									document.getElementById("promotion")
 								}
 							}
@@ -288,7 +291,6 @@
 										divs[k].classList.add("pawn_move");
 									}
 									if(i == (3.5 + 5 * -side) && j == c){
-										console.log(8 - i + 2 * side);
 										document.getElementsByClassName(cols[j] + " " + (8 - i + 2 * side).toString())[0].classList.add("promote");
 									}
 								}
