@@ -14,6 +14,7 @@
 				width: 64px;
 				height: 64px;
 				margin: 0px;
+				padding: 0;
 			}
 			table.board tr td div.light{
 				background-color: #ffeeee;
@@ -72,9 +73,9 @@
 		<div class="promotion hidden" id="divPromote">
 			<table class="board">
 				<tr>
-					<td><div class="option"><span>♖</span></div></td>
-					<td><div class="option"><span>♗</span></div></td>
-					<td><div class="option"><span>♕</span></div></td>
+					<td><div class="option" id="proRook"><span>♖</span></div></td>
+					<td><div class="option" id="proBishop"><span>♗</span></div></td>
+					<td><div class="option" id="proQueen"><span>♕</span></div></td>
 				</tr>
 			</table>
 		</div>
@@ -86,6 +87,7 @@
 			let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 			//pieces
 			let pie = ['♔', '♚', '♕', '♛', '♖', '♜', '♗', '♝', '♘', '♞', '♙', '♟︎'];
+			let promoting = false;
 			//init board state
 			/*let state = [
 				[5, 9, 7, 3, 1, 7, 9, 5],
@@ -126,6 +128,7 @@
 					div.append(p);
 					//add a click listener to each div
 					div.addEventListener("click", () => {
+						if(promoting){return;}
 						let divs = document.getElementsByTagName('div');
 						let moving = false;
 						let de_sel = false;
@@ -159,6 +162,16 @@
 											p.innerText = span.innerText;
 											span.innerText = "";
 											moved = true;
+										}
+
+										//check for promotions, and display promotion interface
+										if(div.classList.contains("promote")){
+											let promote = document.getElementById("divPromote");
+											console.log(to_row);
+											promote.style.left=(to_col * 68 - 86) + "px";
+											promote.style.top=((8 - to_row) * 68 + 20) + "px";
+											promote.classList.remove("hidden");
+											promoting = true;
 										}
 									}
 								}
@@ -201,9 +214,13 @@
 
 									//check for promotions, and display promotion interface
 									if(div.classList.contains("promote")){
-										
+										let promote = document.getElementById("divPromote");
+										promote.style.left=(to_col * 68 - 86) + "px";
+										promote.style.top=((8 - to_row) * 68 + 20) + "px";
+										promote.classList.remove("hidden");
+										promoting = true;
 									}
-									document.getElementById("promotion")
+									
 								}
 							}
 							moving = true;
