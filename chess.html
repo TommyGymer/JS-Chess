@@ -70,6 +70,19 @@
 	<body>
 		<table class="board" id="board">
 		</table>
+		<script type="text/javascript">
+			document.getElementById("proRook").onclick = function(){
+				console.log("promote rook");
+			};
+
+			document.getElementById("proBishop").onclick = function(){
+				console.log("promote bishop");
+			};
+
+			document.getElementById("proQueen").onclick = function(){
+				console.log("promote Queen");
+			};
+		</script>
 		<div class="promotion hidden" id="divPromote">
 			<table class="board">
 				<tr>
