@@ -70,19 +70,6 @@
 	<body>
 		<table class="board" id="board">
 		</table>
-		<script type="text/javascript">
-			document.getElementById("proRook").onclick = function(){
-				console.log("promote rook");
-			};
-
-			document.getElementById("proBishop").onclick = function(){
-				console.log("promote bishop");
-			};
-
-			document.getElementById("proQueen").onclick = function(){
-				console.log("promote Queen");
-			};
-		</script>
 		<div class="promotion hidden" id="divPromote">
 			<table class="board">
 				<tr>
@@ -94,15 +81,68 @@
 		</div>
 
 		<script type="text/javascript">
+			document.getElementById("proRook").onclick = function(){
+				let target = document.getElementsByClassName("promoting")[0];
+				let span = target.getElementsByTagName("span")[0];
+
+				if(target.classList.contains("proBlack")){
+					span.innerText = "♜";
+				}else{
+					span.innerText = "♖";
+				}
+
+				target.classList.remove("promoting");
+				target.classList.remove("proWhite");
+				target.classList.remove("proBlack");
+				document.getElementById("divPromote").classList.add("hidden");
+				promoting = false
+			};
+
+			document.getElementById("proBishop").onclick = function(){
+				let target = document.getElementsByClassName("promoting")[0];
+				let span = target.getElementsByTagName("span")[0];
+				
+				if(target.classList.contains("proBlack")){
+					span.innerText = "♝";
+				}else{
+					span.innerText = "♗";
+				}
+
+				target.classList.remove("promoting");
+				target.classList.remove("proWhite");
+				target.classList.remove("proBlack");
+				document.getElementById("divPromote").classList.add("hidden");
+				promoting = false
+			};
+
+			document.getElementById("proQueen").onclick = function(){
+				let target = document.getElementsByClassName("promoting")[0];
+				let span = target.getElementsByTagName("span")[0];
+				
+				if(target.classList.contains("proBlack")){
+					span.innerText = "♛";
+				}else{
+					span.innerText = "♕";
+				}
+
+				target.classList.remove("promoting");
+				target.classList.remove("proWhite");
+				target.classList.remove("proBlack");
+				document.getElementById("divPromote").classList.add("hidden");
+				promoting = false
+			};
+		</script>
+
+		<script type="text/javascript">
 			//gets the table with id = board
 			let board = document.getElementById("board");
 			//defines the column names
 			let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 			//pieces
 			let pie = ['♔', '♚', '♕', '♛', '♖', '♜', '♗', '♝', '♘', '♞', '♙', '♟︎'];
-			let promoting = false;
+			var promoting = false;
 			//init board state
-			/*let state = [
+			let state = [
 				[5, 9, 7, 3, 1, 7, 9, 5],
 				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
@@ -111,8 +151,8 @@
 				[],
 				[10, 10, 10, 10, 10, 10, 10, 10],
 				[4, 8, 6, 2, 0, 6, 8, 4]
-			];*/
-			let state = [
+			];
+			/*let state = [
 				[],
 				[],
 				[10, 10, 10, 10, 10, 10, 10, 10],
@@ -121,7 +161,7 @@
 				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
 				[]
-			];
+			];*/
 			let turn = 1;
 			//initialise the board
 			for(let i = 0; i < 8; i++){
@@ -180,11 +220,15 @@
 										//check for promotions, and display promotion interface
 										if(div.classList.contains("promote")){
 											let promote = document.getElementById("divPromote");
-											console.log(to_row);
 											promote.style.left=(to_col * 68 - 86) + "px";
 											promote.style.top=((8 - to_row) * 68 + 20) + "px";
 											promote.classList.remove("hidden");
 											promoting = true;
+
+											let c_c = cols[to_col - 1];
+											let c_r = parseInt(to_row);
+											let cdiv = document.getElementsByClassName(c_c + " " + c_r)[0];
+											cdiv.classList.add("promoting");
 										}
 									}
 								}
@@ -232,6 +276,11 @@
 										promote.style.top=((8 - to_row) * 68 + 20) + "px";
 										promote.classList.remove("hidden");
 										promoting = true;
+
+										let c_c = cols[to_col - 1];
+										let c_r = parseInt(to_row);
+										let cdiv = document.getElementsByClassName(c_c + " " + c_r)[0];
+										cdiv.classList.add("promoting");
 									}
 									
 								}
@@ -321,7 +370,16 @@
 										divs[k].classList.add("pawn_move");
 									}
 									if(i == (3.5 + 5 * -side) && j == c){
-										document.getElementsByClassName(cols[j] + " " + (8 - i + 2 * side).toString())[0].classList.add("promote");
+										let target = document.getElementsByClassName(cols[j] + " " + (8 - i + 2 * side).toString())[0];
+										target.classList.add("promote")
+										let whose = side * 2;
+										if(whose == 1){
+											//white
+											target.classList.add("proWhite");
+										}else{
+											//black
+											target.classList.add("proBlack");
+										}
 									}
 								}
 								break;
