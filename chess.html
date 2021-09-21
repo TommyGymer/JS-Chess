@@ -131,7 +131,61 @@
 				document.getElementById("divPromote").classList.add("hidden");
 				promoting = false
 			};
+
+			function clone(x){
+				return JSON.parse(JSON.stringify(x));
+			}
+
+			function refresh_board(){
+				for(let i = 0; i < 8; i++){
+					for(let j = 0; j < 8; j++){
+						let div = document.getElementsByClassName(cols[i] + " " + (j + 1))[0];
+						let span = div.getElementsByTagName("span")[0];
+						span.innerText = pie[state[7 - j][i]] || " ";
+					}
+				}
+
+				let divs = document.getElementsByTagName('div');
+				for(let k = 0; k < divs.length; k++){
+					divs[k].classList.remove("sel");
+					divs[k].classList.remove("move");
+					divs[k].classList.remove("moved");
+					divs[k].classList.remove("pawn_move");
+					divs[k].classList.remove("promote");
+				}
+			}
+
+			function reset(){
+				state = clone(states[0]);
+				turn = 1;
+				curr_state = 0;
+				refresh_board();
+			}
+
+			function back(){
+				curr_state--;
+				if(curr_state < 0){
+					curr_state = 0;
+					return;
+				}
+
+				turn = (turn + 1) % 2;
+				state = clone(states[curr_state]);
+				refresh_board();
+			}
+
+			function next(){
+				if(curr_state >= states.length){
+					
+				}
+			}
 		</script>
+
+		<div>
+			<button onclick="reset()">Reset</button>
+			<button onclick="back()">Undo</button>
+			<button onclick="forward()">Next</button>
+		</div>
 
 		<script type="text/javascript">
 			//gets the table with id = board
@@ -162,6 +216,10 @@
 				[],
 				[]
 			];*/
+			let curr_state = 0;
+			let states = [];
+			states[curr_state] = clone(state);
+			
 			let turn = 1;
 			//initialise the board
 			for(let i = 0; i < 8; i++){
@@ -179,6 +237,7 @@
 					let p = document.createElement("span");
 					p.innerText = pie[state[i][j]] || " ";
 					div.append(p);
+					//add a castle class to each of the rooks and the kings
 					//add a click listener to each div
 					div.addEventListener("click", () => {
 						if(promoting){return;}
@@ -213,8 +272,12 @@
 										if(move_possible){
 											let span = divs[k].getElementsByTagName("span")[0];
 											p.innerText = span.innerText;
+											state[8 - from_row][from_col - 1] = null;
+											state[8 - to_row][to_col - 1] = pie.indexOf(span.innerText);
 											span.innerText = "";
 											moved = true;
+											states[curr_state + 1] = clone(state);
+											curr_state++;
 										}
 
 										//check for promotions, and display promotion interface
@@ -265,8 +328,12 @@
 									}else if((from_type != pie.indexOf(divs[k].innerText) % 2) && move_possible){
 										let span = divs[k].getElementsByTagName("span")[0];
 										p.innerText = span.innerText;
+										state[8 - from_row][from_col - 1] = null;
+										state[8 - to_row][to_col - 1] = pie.indexOf(span.innerText);
 										span.innerText = "";
 										moved = true;
+										states[curr_state + 1] = clone(state);
+										curr_state++;
 									}
 
 									//check for promotions, and display promotion interface
