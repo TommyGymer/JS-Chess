@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+<html lang="en"> 
 <html>
 	<head>
+		<meta charset="utf-8"/>
 		<style>
 			table.board{
 				margin: 0px;
@@ -141,11 +144,11 @@
 					for(let j = 0; j < 8; j++){
 						let div = document.getElementsByClassName(cols[i] + " " + (j + 1))[0];
 						let span = div.getElementsByTagName("span")[0];
-						span.innerText = pie[state[7 - j][i]] || " ";
+						span.innerText = pie[state[7 - j][i]] || "";
 					}
 				}
 
-				let divs = document.getElementsByTagName('div');
+				let divs = document.getElementById("board").getElementsByTagName('div');
 				for(let k = 0; k < divs.length; k++){
 					divs[k].classList.remove("sel");
 					divs[k].classList.remove("move");
@@ -157,10 +160,28 @@
 
 			function reset(){
 				state = clone(states[0]);
-				states = [];
+				states = [clone(state)];
 				turn = 1;
 				curr_state = 0;
 				refresh_board();
+
+				let divs = document.getElementById("board").getElementsByTagName('div');
+				for(let k = 0; k < divs.length; k++){
+					let div = divs[k];
+					let span = div.getElementsByTagName("span")[0];
+					if(span.innerText.includes("♔")){
+						div.classList.add("unmoved");
+					}
+					if(span.innerText.includes("♚")){
+						div.classList.add("unmoved");
+					}
+					if(span.innerText.includes("♖")){
+						div.classList.add("unmoved");
+					}
+					if(span.innerText.includes("♜")){
+						div.classList.add("unmoved");
+					}
+				}
 			}
 
 			function back(){
@@ -202,7 +223,7 @@
 			let pie = ['♔', '♚', '♕', '♛', '♖', '♜', '♗', '♝', '♘', '♞', '♙', '♟︎'];
 			var promoting = false;
 			//init board state
-			let state = [
+			/*let state = [
 				[5, 9, 7, 3, 1, 7, 9, 5],
 				[11, 11, 11, 11, 11, 11, 11, 11],
 				[],
@@ -211,7 +232,7 @@
 				[],
 				[10, 10, 10, 10, 10, 10, 10, 10],
 				[4, 8, 6, 2, 0, 6, 8, 4]
-			];
+			];*/
 			/*let state = [
 				[],
 				[],
@@ -222,6 +243,16 @@
 				[],
 				[]
 			];*/
+			let state = [
+				[5, null, null, null, 1, null, null, 5],
+				[11, 11, 11, 11, 11, 11, 11, 11],
+				[],
+				[],
+				[],
+				[],
+				[10, 10, 10, 10, 10, 10, 10, 10],
+				[4, null, null, null, 0, null, null, 4]
+			];
 			let curr_state = 0;
 			let play_index = 0;
 			let states = [];
@@ -242,9 +273,18 @@
 					col.append(div);
 					//add the piece icon to the div
 					let p = document.createElement("span");
-					p.innerText = pie[state[i][j]] || " ";
+					p.innerText = pie[state[i][j]] || "";
 					div.append(p);
+
 					//add a castle class to each of the rooks and the kings
+					/*
+						only if neither have moved
+						no pieces inbetween
+						king not in check
+						squares inbetween not under attack
+						rook can be under attack
+					*/
+
 					//add a click listener to each div
 					div.addEventListener("click", () => {
 						if(promoting){return;}
@@ -286,6 +326,11 @@
 											states[curr_state + 1] = clone(state);
 											curr_state++;
 											play_index = curr_state;
+
+											let col = cols[from_col - 1];
+											let row = parseInt(from_row);
+											let cdiv = document.getElementsByClassName(col + " " + row)[0];
+											cdiv.classList.remove("unmoved");
 										}
 
 										//check for promotions, and display promotion interface
@@ -343,6 +388,11 @@
 										states[curr_state + 1] = clone(state);
 										curr_state++;
 										play_index = curr_state;
+
+										let col = cols[from_col - 1];
+										let row = parseInt(from_row);
+										let cdiv = document.getElementsByClassName(col + " " + row)[0];
+										cdiv.classList.remove("unmoved");
 									}
 
 									//check for promotions, and display promotion interface
@@ -359,6 +409,8 @@
 										cdiv.classList.add("promoting");
 									}
 									
+								}else{
+									de_sel = true;
 								}
 							}
 							moving = true;
@@ -380,12 +432,17 @@
 							div.classList.add("moved");
 							turn = (turn + 1) % 2;
 							return;
+						}else if(moving){
+							if(de_sel){
+								div.classList.add("sel");
+							}else{
+								return;
+							}
 						}
 
 						//add possible move markers
 						let pos = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0].getElementsByTagName("span")[0];
 						let type = Math.floor(pie.indexOf(pos.innerText) / 2);
-						if(turn == pie.indexOf(pos.innerText) % 2){return;}
 						switch(type){
 							case 0:
 								for(let k = 0; k < divs.length; k++){
@@ -396,6 +453,9 @@
 										divs[k].classList.add("move");
 									}
 								}
+
+								//check for castle
+
 								break;
 							case 1:
 								for(let k = 0; k < divs.length; k++){
@@ -414,6 +474,9 @@
 										divs[k].classList.add("move");
 									}
 								}
+
+								//check for castle
+
 								break;
 							case 3:
 								for(let k = 0; k < divs.length; k++){
@@ -460,6 +523,7 @@
 								}
 								break;
 						}
+						if(turn == pie.indexOf(pos.innerText) % 2){return;}
 					});
 					//add the location as a class
 					div.classList.add(cols[j]);
@@ -469,6 +533,10 @@
 						div.classList.add("light");
 					}else{
 						div.classList.add("dark");
+					}
+					//add unmoved to the kings
+					if(state[i][j] == 0 || state[i][j] == 1 || state[i][j] == 4 || state[i][j] == 5){
+						div.classList.add("unmoved");
 					}
 				}
 			}
