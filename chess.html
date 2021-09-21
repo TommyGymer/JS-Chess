@@ -441,21 +441,36 @@
 						}
 
 						//add possible move markers
-						let pos = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0].getElementsByTagName("span")[0];
+						let from_div = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0];
+						let pos = from_div.getElementsByTagName("span")[0];
 						let type = Math.floor(pie.indexOf(pos.innerText) / 2);
+						let from_side = pie.indexOf(pos.innerText) % 2;
 						switch(type){
 							case 0:
 								for(let k = 0; k < divs.length; k++){
 									let c = cols.indexOf(divs[k].classList[0]);
 									let r = 8 - divs[k].classList[1];
+									
 									let dist = Math.sqrt(Math.pow(i-r,2) + Math.pow(j-c,2));
 									if(dist < 1.5 && dist > 0.1){
 										divs[k].classList.add("move");
 									}
+
+									//check for castle
+									let to_div = document.getElementsByClassName(cols[c] + " " + (8 - r).toString())[0];
+									if(to_div == undefined){continue;}
+									let to_pos = to_div.getElementsByTagName("span")[0];
+									let to_side = pie.indexOf(to_pos.innerText) % 2;
+									if(from_div.classList.contains("unmoved")){
+										if(to_div.classList.contains("unmoved")){
+											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
+											if(from_side == to_side){
+												console.log(j < c);
+												console.log(to_div);
+											}
+										}
+									}
 								}
-
-								//check for castle
-
 								break;
 							case 1:
 								for(let k = 0; k < divs.length; k++){
@@ -470,13 +485,26 @@
 								for(let k = 0; k < divs.length; k++){
 									let c = cols.indexOf(divs[k].classList[0]);
 									let r = 8 - divs[k].classList[1];
+
 									if(((c == j || r == i)) && !(c == j && r == i)){
 										divs[k].classList.add("move");
 									}
+
+									//check for castle
+									let to_div = document.getElementsByClassName(cols[c] + " " + (8 - r).toString())[0];
+									if(to_div == undefined){continue;}
+									let to_pos = to_div.getElementsByTagName("span")[0];
+									let to_side = pie.indexOf(to_pos.innerText) % 2;
+									if(from_div.classList.contains("unmoved")){
+										if(to_div.classList.contains("unmoved")){
+											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
+											if(from_side == to_side){
+												console.log(j < c);
+												console.log(to_div);
+											}
+										}
+									}
 								}
-
-								//check for castle
-
 								break;
 							case 3:
 								for(let k = 0; k < divs.length; k++){
