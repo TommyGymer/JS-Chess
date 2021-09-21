@@ -157,6 +157,7 @@
 
 			function reset(){
 				state = clone(states[0]);
+				states = [];
 				turn = 1;
 				curr_state = 0;
 				refresh_board();
@@ -175,16 +176,21 @@
 			}
 
 			function next(){
-				if(curr_state >= states.length){
-					
+				if(curr_state >= play_index){
+					return;
 				}
+				curr_state++;
+
+				turn = (turn + 1) % 2;
+				state = clone(states[curr_state]);
+				refresh_board();
 			}
 		</script>
 
 		<div>
 			<button onclick="reset()">Reset</button>
 			<button onclick="back()">Undo</button>
-			<button onclick="forward()">Next</button>
+			<button onclick="next()">Next</button>
 		</div>
 
 		<script type="text/javascript">
@@ -217,6 +223,7 @@
 				[]
 			];*/
 			let curr_state = 0;
+			let play_index = 0;
 			let states = [];
 			states[curr_state] = clone(state);
 			
@@ -278,6 +285,7 @@
 											moved = true;
 											states[curr_state + 1] = clone(state);
 											curr_state++;
+											play_index = curr_state;
 										}
 
 										//check for promotions, and display promotion interface
@@ -334,6 +342,7 @@
 										moved = true;
 										states[curr_state + 1] = clone(state);
 										curr_state++;
+										play_index = curr_state;
 									}
 
 									//check for promotions, and display promotion interface
