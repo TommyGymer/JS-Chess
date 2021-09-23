@@ -465,8 +465,9 @@
 										if(to_div.classList.contains("unmoved")){
 											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
 											if(from_side == to_side){
-												console.log(j < c);
-												console.log(to_div);
+												let pro_div = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3))] + " " + (8 - r).toString())[0];
+												pro_div.classList.add("move");
+												pro_div.classList.add("pro_king");
 											}
 										}
 									}
@@ -499,8 +500,9 @@
 										if(to_div.classList.contains("unmoved")){
 											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
 											if(from_side == to_side){
-												console.log(j < c);
-												console.log(to_div);
+												let pro_div = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3))] + " " + (8 - r).toString())[0];
+												pro_div.classList.add("move");
+												pro_div.classList.add("pro_king");
 											}
 										}
 									}
