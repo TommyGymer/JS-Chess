@@ -468,6 +468,10 @@
 												let pro_div = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3))] + " " + (8 - r).toString())[0];
 												pro_div.classList.add("move");
 												pro_div.classList.add("pro_king");
+
+												let pro_div_rook = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3)) - 2 * ((j < c) - 0.5)] + " " + (8 - r).toString())[0];
+												pro_div_rook.classList.add("pro_rook");
+												console.log(pro_div_rook);
 											}
 										}
 									}
@@ -496,16 +500,6 @@
 									if(to_div == undefined){continue;}
 									let to_pos = to_div.getElementsByTagName("span")[0];
 									let to_side = pie.indexOf(to_pos.innerText) % 2;
-									if(from_div.classList.contains("unmoved")){
-										if(to_div.classList.contains("unmoved")){
-											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
-											if(from_side == to_side){
-												let pro_div = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3))] + " " + (8 - r).toString())[0];
-												pro_div.classList.add("move");
-												pro_div.classList.add("pro_king");
-											}
-										}
-									}
 								}
 								break;
 							case 3:
