@@ -1,5 +1,24 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
+
+<!--
+	Chess: a pure html, js and css implementation of single, or local multiplayer chess
+    Copyright (C) 2021  Thomas Gymer
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
 <html>
 	<head>
 		<meta charset="utf-8"/>
@@ -465,8 +484,13 @@
 										if(to_div.classList.contains("unmoved")){
 											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
 											if(from_side == to_side){
-												console.log(j < c);
-												console.log(to_div);
+												let pro_div = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3))] + " " + (8 - r).toString())[0];
+												pro_div.classList.add("move");
+												pro_div.classList.add("pro_king");
+
+												let pro_div_rook = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3)) - 2 * ((j < c) - 0.5)] + " " + (8 - r).toString())[0];
+												pro_div_rook.classList.add("pro_rook");
+												console.log(pro_div_rook);
 											}
 										}
 									}
@@ -495,15 +519,6 @@
 									if(to_div == undefined){continue;}
 									let to_pos = to_div.getElementsByTagName("span")[0];
 									let to_side = pie.indexOf(to_pos.innerText) % 2;
-									if(from_div.classList.contains("unmoved")){
-										if(to_div.classList.contains("unmoved")){
-											if(Math.abs(pie.indexOf(pos.innerText) - pie.indexOf(to_pos.innerText)) <= 1){continue;}
-											if(from_side == to_side){
-												console.log(j < c);
-												console.log(to_div);
-											}
-										}
-									}
 								}
 								break;
 							case 3:
