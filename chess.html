@@ -497,6 +497,11 @@
 							divs[k].classList.remove("pawn_move");
 							divs[k].classList.remove("promote");
 						}
+						let from_div = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0];
+						let pos = from_div.getElementsByTagName("span")[0];
+						if(pie.indexOf(pos.innerText) % 2 == turn){
+							return;
+						}
 						if(!moving){
 							 if(!de_sel){
 							 	div.classList.add("sel");
@@ -516,8 +521,6 @@
 						}
 
 						//add possible move markers
-						let from_div = document.getElementsByClassName(cols[j] + " " + (8 - i).toString())[0];
-						let pos = from_div.getElementsByTagName("span")[0];
 						let type = Math.floor(pie.indexOf(pos.innerText) / 2);
 						let from_side = pie.indexOf(pos.innerText) % 2;
 						switch(type){
