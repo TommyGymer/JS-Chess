@@ -234,6 +234,10 @@
 		</div>
 
 		<script type="text/javascript">
+			function dist(x1, y1, x2, y2){
+				return Math.abs(Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
+			}
+
 			//gets the table with id = board
 			let board = document.getElementById("board");
 			//defines the column names
@@ -352,6 +356,32 @@
 											cdiv.classList.remove("unmoved");
 										}
 
+										if(div.classList.contains("pro_king")){
+											let castles = document.getElementsByClassName("pro_rook");
+											for(let c = 0; c < castles.length; c++){
+												//check distance from div is 1
+												let classes = castles[c].classList;
+												let rook_col = cols.indexOf(classes[0]) + 1;
+												let rook_row = classes[1];
+												let s = dist(rook_col, rook_row, to_col, to_row);
+												if(s <= 1){
+													let to_span = castles[c].getElementsByTagName("span")[0];
+													//need to find the corner
+													let corners = document.getElementsByClassName("unmoved " + rook_row);
+													for(let i = 0; i < corners.length; i++){
+														let corner_col = cols.indexOf(corners[i].classList[0]) + 1;
+														let corner_row = rook_row;
+														let s2 = dist(to_col, to_row, corner_col, corner_row);
+														if(s2 <= 2){
+															from_span = corners[c].getElementsByTagName("span")[0];
+															to_span.innerText = from_span.innerText;
+															from_span.innerText = "";
+														}
+													}
+												}
+											}
+										}
+
 										//check for promotions, and display promotion interface
 										if(div.classList.contains("promote")){
 											let promote = document.getElementById("divPromote");
@@ -412,6 +442,32 @@
 										let row = parseInt(from_row);
 										let cdiv = document.getElementsByClassName(col + " " + row)[0];
 										cdiv.classList.remove("unmoved");
+									}
+
+									if(div.classList.contains("pro_king")){
+										let castles = document.getElementsByClassName("pro_rook");
+										for(let c = 0; c < castles.length; c++){
+											//check distance from div is 1
+											let classes = castles[c].classList;
+											let rook_col = cols.indexOf(classes[0]) + 1;
+											let rook_row = classes[1];
+											let s = dist(rook_col, rook_row, to_col, to_row);
+											if(s <= 1){
+												let to_span = castles[c].getElementsByTagName("span")[0];
+												//need to find the corner
+												let corners = document.getElementsByClassName("unmoved " + rook_row);
+												for(let i = 0; i < corners.length; i++){
+													let corner_col = cols.indexOf(corners[i].classList[0]) + 1;
+													let corner_row = rook_row;
+													let s2 = dist(to_col, to_row, corner_col, corner_row);
+													if(s2 <= 2){
+														from_span = corners[c].getElementsByTagName("span")[0];
+														to_span.innerText = from_span.innerText;
+														from_span.innerText = "";
+													}
+												}
+											}
+										}
 									}
 
 									//check for promotions, and display promotion interface
@@ -490,7 +546,6 @@
 
 												let pro_div_rook = document.getElementsByClassName(cols[c - 3 * ((j < c) - (2/3)) - 2 * ((j < c) - 0.5)] + " " + (8 - r).toString())[0];
 												pro_div_rook.classList.add("pro_rook");
-												console.log(pro_div_rook);
 											}
 										}
 									}
